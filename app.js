@@ -15,6 +15,10 @@ const hpp = require('hpp');
 const validator = require('validator');
 
 const app = express();
+const apiRouter = require('./src/Routes/api');
+
+// Use the API routes defined in api.js
+app.use('/api', apiRouter);
 
 // Middleware setup
 app.use(bodyParser.json());
