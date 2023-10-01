@@ -26,22 +26,25 @@ app.use(hpp())
 //Body perser
 app.use(bodyParser.json())
 
-//Rate Limiter
-const limiter = rateLimit({ windowMs: 15 * 60 * 100, max: 3000 })
+// Request Rate Limit
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 })
+app.use(limiter)
 
-//Database
+// Mongo DB Database Connection
+// let URI = "mongodb+srv://<username>:<password>@cluster0.7uslu.mongodb.net/inven?retryWrites=true&w=majority";
+// let OPTION = { user: 'testuser7777', pass: 'testuser7777', autoIndex: true }
+// mongoose.connect(URI, OPTION, (error) => {
+//     console.log("Connection Success")
+//     console.log(error)
+// })
 
 
-// Managing Front End Routing
-app.use(express.static('client/build'))
-app.get("*", function (req, res) {
-    req.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-})
-
-
-
-// Managing BackEnd API Routing
+// Routing Implement
 app.use("/api/v1", router)
 
+// Undefined Route Implement
+app.use("*", (req, res) => {
+    res.status(404).json({ status: "fail", data: "Not Found" })
+})
 
 module.exports = app;
