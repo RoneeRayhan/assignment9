@@ -54,7 +54,7 @@ app.use("/api/v1", router)
 
 // Undefined Route Implement
 app.use("*", (req, res) => {
-    res.status(404).json({ status: "fail", data: "Not Found" })
+    res.status(404).json({ status: "fail", data: "404 => Not Found" })
 })
 
 module.exports = app;
