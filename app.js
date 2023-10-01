@@ -17,9 +17,6 @@ const validator = require('validator');
 const app = express();
 const apiRouter = require('./src/Routes/api');
 
-// Use the API routes defined in api.js
-app.use('/api', apiRouter);
-
 // Middleware setup
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -31,6 +28,8 @@ app.use(hpp());
 app.use(validator());
 
 // Define your routes here
+// Use the API routes defined in api.js
+app.use('/api', apiRouter);
 
 // Undefined route handler
 app.use((req, res) => {
