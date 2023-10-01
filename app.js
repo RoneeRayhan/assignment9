@@ -1,40 +1,47 @@
-// app.js
+
 const express = require('express');
+const router = require('./src/Routes/api');
+const app = new express();
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const multer = require('multer');
-const jwt = require('jsonwebtoken');
-const mysql = require('mysql');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const mongoSanitize = require('express-mongo-sanitize');
+
+//Security Middleware
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+// const xss = require('xss-clean');
 const hpp = require('hpp');
-const validator = require('validator');
+const cors = require('cors');
 
-const app = express();
-const apiRouter = require('./src/Routes/api');
+//Database
+const mongoose = require('mongoose');
+const path = require("path");
 
-// Middleware setup
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(multer());
+//Security Middleware Implement
 app.use(cors());
-app.use(mongoSanitize());
-app.use(helmet());
-app.use(hpp());
-app.use(validator());
+app.use(helmet())
+app.use(mongoSanitize())
+// app.use(xss())
+app.use(hpp())
 
-// Define your routes here
-// Use the API routes defined in api.js
-app.use('/api/v1', apiRouter);
+//Body perser
+app.use(bodyParser.json())
 
-// Undefined route handler
-app.use((req, res) => {
-    res.status(404).json({ status: 'error', message: 'Route not found' });
-});
+//Rate Limiter
+const limiter = rateLimit({ windowMs: 15 * 60 * 100, max: 3000 })
+
+//Database
+
+
+// Managing Front End Routing
+app.use(express.static('client/build'))
+app.get("*", function (req, res) {
+    req.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+})
+
+
+
+// Managing BackEnd API Routing
+app.use("/api/v1", router)
+
 
 module.exports = app;
-
