@@ -29,7 +29,7 @@ app.use(validator());
 
 // Define your routes here
 // Use the API routes defined in api.js
-app.use('/api', apiRouter);
+app.use('/api/v1', apiRouter);
 
 // Undefined route handler
 app.use((req, res) => {
